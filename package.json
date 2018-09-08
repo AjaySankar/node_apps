@@ -1,0 +1,14 @@
+{
+  "name": "my_node_apps",
+  "version": "1.0.0",
+  "description": "Initial Practice",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ajay Sankar",
+  "license": "ISC",
+  "dependencies": {
+    "yargs": "^4.7.1"
+  }
+}
