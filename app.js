@@ -1,21 +1,62 @@
-let command = process.argv[2]  || '';
-console.log('Command: '+command);
+console.log('Starting app.js');
 
-if(command == ''){
-  console.log('Command is empty');
-}
-else if(command == 'add'){
-  console.log('Command is Add');
-}
-else if(command == 'list'){
-  console.log('Command is List');
-}
-else if(command == 'read'){
-  console.log('Command is Read');
-}
-else if(command == 'remove'){
-  console.log('Command is Remove');
-}
-else{
-  console.log('Command is not recognized');
+const fs = require('fs');
+const yargs = require('yargs');
+
+const notes = require('./notes.js');
+
+const titleOptions = {
+  describe: 'Title of note',
+  demand: true,
+  alias: 't'
+};
+const bodyOptions = {
+  describe: 'Body of note',
+  demand: true,
+  alias: 'b'
+};
+const argv = yargs
+  .command('add', 'Add a new note', {
+    title: titleOptions,
+    body: bodyOptions
+  })
+  .command('list', 'List all notes')
+  .command('read', 'Read a note', {
+    title: titleOptions,
+  })
+  .command('remove', 'Remove a note', {
+    title: titleOptions
+  })
+  .help()
+  .argv;
+
+var command = argv._[0];
+
+if (command === 'add') {
+  var note = notes.addNote(argv.title, argv.body);
+  if (note) {
+    console.log('Note created');
+    notes.logNotes(note);
+  } else {
+    console.log('Note title taken');
+  }
+} else if (command === 'list') {
+  var allNotes = notes.getAll();
+  console.log(`Printing ${allNotes.length} notes`);
+  allNotes.forEach(note => notes.logNotes(note));
+} else if (command === 'read') {
+  var note = notes.getNote(argv.title);
+  if(note){
+    console.log('Note found');
+    notes.logNotes(note);
+  }
+  else{
+    console.log('Note not found');
+  }
+} else if (command === 'remove') {
+  var notesRemoved = notes.removeNote(argv.title);
+  var message = notesRemoved ? 'Notes removed' : 'Notes not found';
+  console.log(message);
+} else {
+  console.log('Command not recognized');
 }
