@@ -1,2 +1,3 @@
 notes_app/node_modules/**
 notes_app/notes-data.json
+weather_app/node_modules/**
